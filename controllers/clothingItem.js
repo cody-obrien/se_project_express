@@ -12,10 +12,49 @@ const createItem = (req, res) => {
       res.send({ data: item });
     })
     .catch((err) => {
-      res.status(500).send({ message: "Error from createItem", err });
+      res.status(500).send({ message: "createItem failed", err });
     });
 };
 
+const getItems = (req, res) => {
+  ClothingItem.find({})
+    .then((items) => {
+      res.status(200).send(items);
+    })
+    .catch((err) => {
+      res.status(500).send({ message: "getItems failed", err });
+    });
+};
+
+const updateItem = (req, res) => {
+  const { itemId } = req.params;
+  const { imageURL } = req.body;
+
+  ClothingItem.findByIdAndUpdate(itemId, { $set: { imageURL } })
+    .orFail()
+    .then((item) => {
+      res.status(200).send({ data: item });
+    })
+    .catch((err) => {
+      res.status(500).send({ message: "updateItem failed", err });
+    });
+};
+
+const deleteItem = (req, res) => {
+  const { itemId } = req.params;
+  console.log(itemId);
+  ClothingItem.findByIdAndDelete(itemId)
+    .orFail()
+    .then((item) => {
+      res.status(204).send({});
+    })
+    .catch((err) => {
+      res.status(500).send({ message: "deleteItem failed", err });
+    });
+};
 module.exports = {
   createItem,
+  getItems,
+  updateItem,
+  deleteItem,
 };
