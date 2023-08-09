@@ -1,14 +1,15 @@
 const User = require("../models/user");
+const handleError = require("../utils/config");
 
 const createUser = (req, res) => {
   const { name, avatar } = req.body;
 
   User.create({ name, avatar })
     .then((user) => {
-      res.status(200).send({ data: user });
+      res.status(200).send({ user });
     })
     .catch((err) => {
-      res.status(500).send({ message: "createUser failed", err });
+      handleError(req, res, err);
     });
 };
 
@@ -18,7 +19,7 @@ const getUsers = (req, res) => {
       res.status(200).send(users);
     })
     .catch((err) => {
-      res.status(500).send({ message: "getUsers failed", err });
+      handleError(req, res, err);
     });
 };
 
@@ -27,10 +28,10 @@ const getUser = (req, res) => {
   User.findById(userId)
     .orFail()
     .then((user) => {
-      res.status(200).send({ data: user });
+      res.status(200).send({ user });
     })
     .catch((err) => {
-      res.status(500).send({ message: "getUser failed", err });
+      handleError(req, res, err);
     });
 };
 

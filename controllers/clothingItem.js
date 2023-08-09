@@ -1,16 +1,16 @@
 const ClothingItem = require("../models/clothingItem");
+const handleError = require("../utils/config");
 
 const createItem = (req, res) => {
-  const { name, weather, imageURL } = req.body;
+  const { name, weather, imageUrl } = req.body;
   const userId = req.user._id;
 
-  ClothingItem.create({ name, weather, imageURL, owner: userId })
+  ClothingItem.create({ name, weather, imageUrl, owner: userId })
     .then((item) => {
-      console.log(item);
-      res.send({ data: item });
+      res.status(200).send({ item });
     })
     .catch((err) => {
-      res.status(500).send({ message: "createItem failed", err });
+      handleError(req, res, err);
     });
 };
 
@@ -20,21 +20,21 @@ const getItems = (req, res) => {
       res.status(200).send(items);
     })
     .catch((err) => {
-      res.status(500).send({ message: "getItems failed", err });
+      handleError(req, res, err);
     });
 };
 
 const updateItem = (req, res) => {
   const { itemId } = req.params;
-  const { imageURL } = req.body;
+  const { imageUrl } = req.body;
 
-  ClothingItem.findByIdAndUpdate(itemId, { $set: { imageURL } })
+  ClothingItem.findByIdAndUpdate(itemId, { $set: { imageUrl } })
     .orFail()
     .then((item) => {
-      res.status(200).send({ data: item });
+      res.status(200).send({ item });
     })
     .catch((err) => {
-      res.status(500).send({ message: "updateItem failed", err });
+      handleError(req, res, err);
     });
 };
 
@@ -44,10 +44,10 @@ const deleteItem = (req, res) => {
   ClothingItem.findByIdAndDelete(itemId)
     .orFail()
     .then((item) => {
-      res.status(204).send({});
+      res.status(200).send({ item });
     })
     .catch((err) => {
-      res.status(500).send({ message: "deleteItem failed", err });
+      handleError(req, res, err);
     });
 };
 
@@ -59,10 +59,10 @@ const likeItem = (req, res) => {
   )
     .orFail()
     .then((item) => {
-      res.status(200).send({ data: item });
+      res.status(200).send({ item });
     })
     .catch((err) => {
-      res.status(500).send({ message: "likeItem failed", err });
+      handleError(req, res, err);
     });
 };
 
@@ -74,10 +74,10 @@ const dislikeItem = (req, res) => {
   )
     .orFail()
     .then((item) => {
-      res.status(200).send({ data: item });
+      res.status(200).send({ item });
     })
     .catch((err) => {
-      res.status(500).send({ message: "dislikeItem failed", err });
+      handleError(req, res, err);
     });
 };
 
