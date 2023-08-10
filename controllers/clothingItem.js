@@ -24,19 +24,19 @@ const getItems = (req, res) => {
     });
 };
 
-const updateItem = (req, res) => {
-  const { itemId } = req.params;
-  const { imageUrl } = req.body;
+// const updateItem = (req, res) => {
+//   const { itemId } = req.params;
+//   const { imageUrl } = req.body;
 
-  ClothingItem.findByIdAndUpdate(itemId, { $set: { imageUrl } })
-    .orFail()
-    .then((item) => {
-      res.status(200).send({ item });
-    })
-    .catch((err) => {
-      handleError(req, res, err);
-    });
-};
+//   ClothingItem.findByIdAndUpdate(itemId, { $set: { imageUrl } })
+//     .orFail()
+//     .then((item) => {
+//       res.status(200).send({ item });
+//     })
+//     .catch((err) => {
+//       handleError(req, res, err);
+//     });
+// };
 
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
@@ -84,7 +84,7 @@ const dislikeItem = (req, res) => {
 module.exports = {
   createItem,
   getItems,
-  updateItem,
+  // updateItem,
   deleteItem,
   likeItem,
   dislikeItem,
