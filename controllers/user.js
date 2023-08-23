@@ -4,13 +4,15 @@ const handleError = require("../utils/config");
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
 
-  User.create({ name, avatar, email, password })
-    .then((user) => {
-      res.status(200).send({ user });
-    })
-    .catch((err) => {
-      handleError(req, res, err);
-    });
+  User.init().then(() => {
+    User.create({ name, avatar, email, password })
+      .then((user) => {
+        res.status(200).send({ user });
+      })
+      .catch((err) => {
+        handleError(req, res, err);
+      });
+  });
 };
 
 const getUsers = (req, res) => {
