@@ -2,9 +2,9 @@ const User = require("../models/user");
 const handleError = require("../utils/config");
 
 const createUser = (req, res) => {
-  const { name, avatar } = req.body;
+  const { name, avatar, email, password } = req.body;
 
-  User.create({ name, avatar })
+  User.create({ name, avatar, email, password })
     .then((user) => {
       res.status(200).send({ user });
     })
