@@ -39,12 +39,14 @@ const getUser = (req, res) => {
 };
 
 const logIn = (req, res) => {
-  User.findUserByCredentials(req.email, req.password).then((user) => {
-    res.send({ user });
-  });
-  // .catch((err) => {
-  //   handleError(req, res, err);
-  // });
+  User.findUserByCredentials(req.body.email, req.body.password)
+    .then((user) => {
+      res.send({ user });
+    })
+    .catch((err) => {
+      console.error(err);
+      // handleError(req, res, err);
+    });
 };
 
 module.exports = { createUser, getUsers, getUser, logIn };
