@@ -68,7 +68,7 @@ const logIn = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      // handleError(req, res, err);
+      handleError(req, res, err);
     });
 };
 
