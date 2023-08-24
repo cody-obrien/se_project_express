@@ -10,4 +10,5 @@ router.get("/", getUsers);
 router.get("/:userId", getUser);
 
 router.post("/signin", logIn);
+
 module.exports = router;
