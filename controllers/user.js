@@ -10,7 +10,9 @@ const createUser = (req, res) => {
   bcrypt.hash(password, 10).then((hash) =>
     User.create({ name, avatar, email, password: hash })
       .then((user) => {
-        res.status(200).send({ user });
+        const userData = user.toObject();
+        delete userData.password;
+        res.status(200).send({ userData });
       })
       .catch((err) => {
         handleError(req, res, err);
