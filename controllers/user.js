@@ -28,9 +28,25 @@ const getUsers = (req, res) => {
     });
 };
 
-const getUser = (req, res) => {
-  const { userId } = req.params;
+const getCurrentUser = (req, res) => {
+  const { userId } = req.user._id;
   User.findById(userId)
+    .orFail()
+    .then((user) => {
+      res.status(200).send({ user });
+    })
+    .catch((err) => {
+      handleError(req, res, err);
+    });
+};
+
+const updateCurrentUser = (req, res) => {
+  const { name, avatar } = req.body;
+  User.findByIdAndUpdate(
+    req.user._id,
+    { name, avatar },
+    { new: true, runValidators: true },
+  )
     .orFail()
     .then((user) => {
       res.status(200).send({ user });
@@ -54,4 +70,4 @@ const logIn = (req, res) => {
     });
 };
 
-module.exports = { createUser, getUsers, getUser, logIn };
+module.exports = { createUser, updateCurrentUser, getCurrentUser, logIn };

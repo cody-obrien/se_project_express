@@ -1,6 +1,7 @@
 const {
   ERROR_400,
   ERROR_401,
+  ERROR_403,
   ERROR_404,
   ERROR_409,
   ERROR_500,
@@ -20,6 +21,8 @@ const handleError = (req, res, error) => {
       case "CastError":
         res.status(ERROR_400).send({ message: "Could not cast parameters" });
         break;
+      case "ForbiddenError":
+        res.status(ERROR_403).send({ message: "Forbidden Action" });
       case "DocumentNotFoundError":
         res.status(ERROR_404).send({ message: "Resource not found" });
         break;

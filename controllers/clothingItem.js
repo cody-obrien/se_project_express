@@ -41,6 +41,21 @@ const getItems = (req, res) => {
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
 
+  ClothingItem.find(itemId)
+    .orFail()
+    .then((item) => {
+      if (item.owner !== req.user._id) {
+        const ForbiddenError = { name: "ForbiddenError" };
+        throw ForbiddenError;
+      }
+      ClothingItem.findByIdAndDelete(itemId).then((res) => {
+        res.status(200).send({ message: "Item deleted" });
+      });
+    })
+    .catch((err) => {
+      handleError(req, res, err);
+    });
+
   ClothingItem.findByIdAndDelete(itemId)
     .orFail()
     .then((item) => {
