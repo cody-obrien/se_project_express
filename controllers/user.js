@@ -1,18 +1,19 @@
 const User = require("../models/user");
 const handleError = require("../utils/config");
+const bcrypt = require("bcrypt");
 
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
 
-  User.init().then(() => {
-    User.create({ name, avatar, email, password })
+  bcrypt.hash(password, 10).then((hash) =>
+    User.create({ name, avatar, email, password: hash })
       .then((user) => {
         res.status(200).send({ user });
       })
       .catch((err) => {
         handleError(req, res, err);
-      });
-  });
+      }),
+  );
 };
 
 const getUsers = (req, res) => {
@@ -37,4 +38,13 @@ const getUser = (req, res) => {
     });
 };
 
-module.exports = { createUser, getUsers, getUser };
+const logIn = (req, res) => {
+  User.findUserByCredentials(req.email, req.password).then((user) => {
+    res.send({ user });
+  });
+  // .catch((err) => {
+  //   handleError(req, res, err);
+  // });
+};
+
+module.exports = { createUser, getUsers, getUser, logIn };
