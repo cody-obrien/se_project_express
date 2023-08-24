@@ -2,7 +2,7 @@ const User = require("../models/user");
 const handleError = require("../utils/config");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const JWT_SECRET = require("../utils/constants.js");
+const { JWT_SECRET } = require("../utils/constants.js");
 
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;

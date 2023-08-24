@@ -43,14 +43,14 @@ userSchema.statics.findUserByCredentials = function findUserByCredentials(
       if (!user) {
         const AuthenticationError = new Error("wrong user");
         AuthenticationError.name = "AuthenticationError";
-        return Promise.reject(AuthenticationError);
+        return Promise.reject("AuthenticationError");
       }
 
       return bcrypt.compare(password, user.password).then((matched) => {
         if (!matched) {
           const AuthenticationError = new Error("wrong pass");
           AuthenticationError.name = "AuthenticationError";
-          return Promise.reject(AuthenticationError);
+          return Promise.reject("AuthenticationError");
         }
         return user;
       });
