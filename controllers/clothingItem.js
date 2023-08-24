@@ -24,20 +24,6 @@ const getItems = (req, res) => {
     });
 };
 
-// const updateItem = (req, res) => {
-//   const { itemId } = req.params;
-//   const { imageUrl } = req.body;
-
-//   ClothingItem.findByIdAndUpdate(itemId, { $set: { imageUrl } })
-//     .orFail()
-//     .then((item) => {
-//       res.status(200).send({ item });
-//     })
-//     .catch((err) => {
-//       handleError(req, res, err);
-//     });
-// };
-
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
 
@@ -45,24 +31,20 @@ const deleteItem = (req, res) => {
     .orFail()
     .then((item) => {
       if (String(item.owner) !== req.user._id) {
-        return Promise.reject(new Error("Cannot delete another user's item"));
+        throw Error("Cannot delete another user's item");
       }
-      ClothingItem.findByIdAndDelete(item._id).then(() => {
-        res.status(200).send({ message: "Item deleted" });
-      });
+      ClothingItem.findByIdAndDelete(item._id)
+        .orFail()
+        .then(() => {
+          res.status(200).send({ message: "Item deleted" });
+        })
+        .catch((err) => {
+          handleError(req, res, err);
+        });
     })
     .catch((err) => {
       handleError(req, res, err);
     });
-
-  // ClothingItem.findByIdAndDelete(itemId)
-  //   .orFail()
-  //   .then((item) => {
-  //     res.status(200).send({ item });
-  //   })
-  //   .catch((err) => {
-  //     handleError(req, res, err);
-  //   });
 };
 
 const likeItem = (req, res) => {
@@ -98,7 +80,6 @@ const dislikeItem = (req, res) => {
 module.exports = {
   createItem,
   getItems,
-  // updateItem,
   deleteItem,
   likeItem,
   dislikeItem,

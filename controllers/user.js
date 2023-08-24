@@ -1,30 +1,25 @@
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const { JWT_SECRET } = require("../utils/constants");
 const User = require("../models/user");
 const handleError = require("../utils/config");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const { JWT_SECRET } = require("../utils/constants.js");
 
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
 
-  bcrypt.hash(password, 10).then((hash) =>
-    User.create({ name, avatar, email, password: hash })
-      .then((user) => {
-        const userData = user.toObject();
-        delete userData.password;
-        res.status(200).send({ userData });
-      })
-      .catch((err) => {
-        handleError(req, res, err);
-      }),
-  );
-};
-
-const getUsers = (req, res) => {
-  User.find({})
-    .then((users) => {
-      res.status(200).send(users);
-    })
+  bcrypt
+    .hash(password, 10)
+    .then((hash) =>
+      User.create({ name, avatar, email, password: hash })
+        .then((user) => {
+          const userData = user.toObject();
+          delete userData.password;
+          res.status(200).send({ userData });
+        })
+        .catch((err) => {
+          handleError(req, res, err);
+        }),
+    )
     .catch((err) => {
       handleError(req, res, err);
     });

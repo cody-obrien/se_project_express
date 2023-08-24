@@ -29,6 +29,7 @@ const handleError = (req, res, error) => {
         break;
       case "ForbiddenError":
         res.status(ERROR_403).send({ message: "Forbidden Action" });
+        break;
       case "DocumentNotFoundError":
         res.status(ERROR_404).send({ message: "Resource not found" });
         break;
