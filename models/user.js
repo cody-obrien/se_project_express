@@ -40,17 +40,17 @@ userSchema.statics.findUserByCredentials = function findUserByCredentials(
   return this.findOne({ email })
     .select("password")
     .then((user) => {
+      if (!email || !password) {
+        return Promise.reject(new Error("Authentication Failed"));
+      }
+
       if (!user) {
-        const AuthenticationError = new Error("wrong user");
-        AuthenticationError.name = "AuthenticationError";
-        return Promise.reject(AuthenticationError);
+        return Promise.reject(new Error("Authentication Failed"));
       }
 
       return bcrypt.compare(password, user.password).then((matched) => {
         if (!matched) {
-          const AuthenticationError = new Error("wrong pass");
-          AuthenticationError.name = "AuthenticationError";
-          return Promise.reject(AuthenticationError);
+          return Promise.reject(new Error("Authentication Failed"));
         }
         return user;
       });

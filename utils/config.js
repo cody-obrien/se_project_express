@@ -13,6 +13,12 @@ const handleError = (req, res, error) => {
     res
       .status(ERROR_409)
       .send({ message: "A user with that email already exists" });
+  } else if (error.message === "Authentication Failed") {
+    res.status(ERROR_401).send({ message: "Invalid email or password" });
+  } else if (error.message === "Cannot delete another user's item") {
+    res
+      .status(ERROR_403)
+      .send({ message: "Cannot delete another user's item" });
   } else {
     switch (error.name) {
       case "ValidationError":
@@ -26,8 +32,7 @@ const handleError = (req, res, error) => {
       case "DocumentNotFoundError":
         res.status(ERROR_404).send({ message: "Resource not found" });
         break;
-      case "AuthenticationError":
-        res.status(ERROR_401).send({ message: "Incorrect email or password" });
+
       default:
         res.status(ERROR_500).send({ message: "Server encountered an error" });
     }
