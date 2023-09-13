@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 // const cors = require("cors");
-
+const helmet = require("helmet");
 require("dotenv").config();
 
 const { PORT = 3001 } = process.env;
@@ -15,8 +15,8 @@ mongoose.connect(
   (e) => console.log("db error", e),
 );
 
+app.use(helmet());
 const routes = require("./routes");
-
 app.use(express.json());
 
 app.use(routes);
