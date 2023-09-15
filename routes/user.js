@@ -10,6 +10,7 @@ const {
 
 // Create
 router.post("/signup", createUser);
+router.post("/signin", logIn);
 router.use(auth);
 // Read
 router.get("/me", getCurrentUser);

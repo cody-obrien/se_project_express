@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-// const cors = require("cors");
+const cors = require("cors");
 const helmet = require("helmet");
 require("dotenv").config();
 
@@ -14,7 +14,7 @@ mongoose.connect(
   },
   (e) => console.log("db error", e),
 );
-
+app.use(cors());
 app.use(helmet());
 const routes = require("./routes");
 app.use(express.json());
