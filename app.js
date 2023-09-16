@@ -16,8 +16,8 @@ mongoose.connect(
 );
 app.use(cors());
 app.use(helmet());
-const routes = require("./routes");
 app.use(express.json());
+const routes = require("./routes");
 
 app.use(routes);
 
