@@ -1,5 +1,8 @@
 const ClothingItem = require("../models/clothingItem");
 const handleError = require("../utils/config");
+const BadRequestError = require("../utils/errors/BadRequestError");
+const ForbiddenError = require("../utils/errors/ForbiddenError");
+const NotFoundError = require("../utils/errors/NotFoundError");
 
 const createItem = (req, res) => {
   const { name, weather, imageUrl } = req.body;
@@ -10,7 +13,11 @@ const createItem = (req, res) => {
       res.status(200).send({ item });
     })
     .catch((err) => {
-      handleError(req, res, err);
+      // handleError(req, res, err);
+      if (err.name === "ValidationError") {
+        next(new BadRequestError("Invalid Data"));
+      }
+      next(err);
     });
 };
 
@@ -20,7 +27,8 @@ const getItems = (req, res) => {
       res.status(200).send(items);
     })
     .catch((err) => {
-      handleError(req, res, err);
+      // handleError(req, res, err);
+      next(err);
     });
 };
 
@@ -31,19 +39,21 @@ const deleteItem = (req, res) => {
     .orFail()
     .then((item) => {
       if (String(item.owner) !== req.user._id) {
-        throw Error("Cannot delete another user's item");
+        throw new ForbiddenError("Cannot delete another user's item");
       }
       ClothingItem.findByIdAndDelete(item._id)
-        .orFail()
+        .orFail(new NotFoundError("Resource not found"))
         .then(() => {
           res.status(200).send({ message: "Item deleted" });
         })
         .catch((err) => {
-          handleError(req, res, err);
+          // handleError(req, res, err);
+          next(err);
         });
     })
     .catch((err) => {
-      handleError(req, res, err);
+      // handleError(req, res, err);
+      next(err);
     });
 };
 

@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const helmet = require("helmet");
-const errorHandler = require("./middlewares/error-handlers")
+const errorHandler = require("./middlewares/error-handler");
 require("dotenv").config();
 
 const { PORT = 3001 } = process.env;
@@ -21,7 +21,7 @@ app.use(express.json());
 const routes = require("./routes");
 
 app.use(routes);
-app.use(errorHandler)
+app.use(errorHandler);
 app.listen(PORT, () => {
   console.log(`App listening at ${PORT}`);
 });
