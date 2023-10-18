@@ -1,5 +1,13 @@
 const router = require("express").Router();
 const auth = require("../middlewares/auth");
+const {
+  validateURL,
+  validateClothingItem,
+  validateUser,
+  validateLogin,
+  validateId,
+  validateUpdateCurrentUser,
+} = require("../middlewares/validation");
 
 const {
   updateCurrentUser,
@@ -9,12 +17,11 @@ const {
 } = require("../controllers/user");
 
 // Create
-router.post("/signup", createUser);
-router.post("/signin", logIn);
+
 router.use(auth);
 // Read
 router.get("/me", getCurrentUser);
 
 // Update
-router.patch("/me", updateCurrentUser);
+router.patch("/me", validateUpdateCurrentUser, updateCurrentUser);
 module.exports = router;

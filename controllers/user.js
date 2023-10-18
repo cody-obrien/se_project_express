@@ -17,9 +17,7 @@ const createUser = (req, res, next) => {
       }
       return bcrypt.hash(password, 10);
     })
-    .then((hash) => {
-      User.create({ name, avatar, email, password: hash });
-    })
+    .then((hash) => User.create({ name, avatar, email, password: hash }))
     .then((user) => {
       const userData = user.toObject();
       delete userData.password;
@@ -28,8 +26,11 @@ const createUser = (req, res, next) => {
     .catch((err) => {
       if (err.name === "ConflictError") {
         next(err);
+      } else if (err.name === "ValidationError") {
+        next(new BadRequestError("Invalid data"));
+      } else {
+        next(err);
       }
-      next(new BadRequestError("Invalid data"));
     });
 
   // original code before centralized error handling

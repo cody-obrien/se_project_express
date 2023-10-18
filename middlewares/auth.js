@@ -1,12 +1,14 @@
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../utils/constants");
 const { ERROR_401 } = require("../utils/errors");
+const UnauthorizedError = require("../utils/errors/UnauthorizedError");
+const ForbiddenError = require("../utils/errors/ForbiddenError");
 
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith("Bearer ")) {
-    res.status(ERROR_401).send({ message: "Authorization required" });
+    next(new UnauthorizedError("Authorization Required"));
   }
 
   const token = authorization.replace("Bearer ", "");
@@ -16,7 +18,7 @@ module.exports = (req, res, next) => {
     payload = jwt.verify(token, JWT_SECRET);
   } catch (err) {
     console.error(err);
-    res.status(ERROR_401).send({ message: "Forbidden Access" });
+    next(new UnauthorizedError("Authorization Required"));
   }
 
   req.user = payload;
