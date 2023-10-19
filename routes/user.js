@@ -1,20 +1,8 @@
 const router = require("express").Router();
 const auth = require("../middlewares/auth");
-const {
-  validateURL,
-  validateClothingItem,
-  validateUser,
-  validateLogin,
-  validateId,
-  validateUpdateCurrentUser,
-} = require("../middlewares/validation");
+const { validateUpdateCurrentUser } = require("../middlewares/validation");
 
-const {
-  updateCurrentUser,
-  getCurrentUser,
-  createUser,
-  logIn,
-} = require("../controllers/user");
+const { updateCurrentUser, getCurrentUser } = require("../controllers/user");
 
 // Create
 

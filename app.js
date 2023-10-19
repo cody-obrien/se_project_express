@@ -2,10 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const helmet = require("helmet");
+const { errors } = require("celebrate");
 const errorHandler = require("./middlewares/error-handler");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
-const { errors } = require("celebrate");
-
 require("dotenv").config();
 
 const { PORT = 3001 } = process.env;
@@ -29,6 +28,7 @@ app.get("/crash-test", () => {
 });
 
 const routes = require("./routes");
+
 app.use(requestLogger);
 app.use(routes);
 

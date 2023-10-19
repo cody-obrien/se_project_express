@@ -4,14 +4,7 @@ const user = require("./user");
 
 const { logIn, createUser } = require("../controllers/user");
 const NotFoundError = require("../utils/errors/NotFoundError");
-const {
-  validateURL,
-  validateClothingItem,
-  validateUser,
-  validateLogin,
-  validateId,
-  validateUpdateCurrentUser,
-} = require("../middlewares/validation");
+const { validateUser, validateLogin } = require("../middlewares/validation");
 
 router.post("/signin", validateLogin, logIn);
 router.post("/signup", validateUser, createUser);
@@ -19,7 +12,7 @@ router.post("/signup", validateUser, createUser);
 router.use("/users", user);
 router.use("/items", clothingItem);
 
-router.use((req, res) => {
+router.use((next) => {
   next(new NotFoundError("Resource not found"));
 });
 

@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { JWT_SECRET } = require("../utils/constants");
 const User = require("../models/user");
-const handleError = require("../utils/config");
+// const handleError = require("../utils/config");
 const ConflictError = require("../utils/errors/ConflictError");
 const BadRequestError = require("../utils/errors/BadRequestError");
 const NotFoundError = require("../utils/errors/NotFoundError");
@@ -52,7 +52,7 @@ const createUser = (req, res, next) => {
   //   });
 };
 
-const getCurrentUser = (req, res) => {
+const getCurrentUser = (req, res, next) => {
   const userId = req.user._id;
   User.findById(userId)
     .orFail(new NotFoundError("User not found"))
@@ -65,7 +65,7 @@ const getCurrentUser = (req, res) => {
     });
 };
 
-const updateCurrentUser = (req, res) => {
+const updateCurrentUser = (req, res, next) => {
   const { name, avatar } = req.body;
   User.findByIdAndUpdate(
     req.user._id,
@@ -85,7 +85,7 @@ const updateCurrentUser = (req, res) => {
     });
 };
 
-const logIn = (req, res) => {
+const logIn = (req, res, next) => {
   User.findUserByCredentials(req.body.email, req.body.password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
@@ -93,7 +93,7 @@ const logIn = (req, res) => {
       });
       res.send({ token });
     })
-    .catch((err) => {
+    .catch(() => {
       // handleError(req, res, err);
       next(new UnauthorizedError("Incorrect email or password"));
     });
